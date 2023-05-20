@@ -8,11 +8,6 @@ import {ConfigModule} from "@nestjs/config";
 import {UserRepository} from "./users/infra/repositories/user.repository";
 
 
-// DB_PASSWORD=123456
-// DB_NAME=hexagonal
-// DB_HOST=localhost
-// DB_PORT=5432
-// DB_USERNAME=postgres
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -26,7 +21,8 @@ import {UserRepository} from "./users/infra/repositories/user.repository";
             autoLoadEntities: true,
             synchronize: true
         }),
-        UsersModule],
+        UsersModule
+    ],
     controllers: [UsersController],
     providers: [UsersService, UserRepository],
 })
