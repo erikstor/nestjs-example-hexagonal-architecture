@@ -1,11 +1,13 @@
 import {Module} from '@nestjs/common';
 import {UsersModule} from './users/users.module';
-import {UsersController} from './users/infra/controller/users.controller';
+import {UsersController} from './users/infra/controllers/users.controller';
 import {UsersService} from './users/app/users.service';
 // import process from "process";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ConfigModule} from "@nestjs/config";
 import {UserRepository} from "./users/infra/repositories/user.repository";
+import {AuthService} from "./users/app/auth.service";
+import {JwtService} from "@nestjs/jwt";
 
 
 @Module({
@@ -21,10 +23,10 @@ import {UserRepository} from "./users/infra/repositories/user.repository";
             autoLoadEntities: true,
             synchronize: true
         }),
-        UsersModule
+        UsersModule,
     ],
     controllers: [UsersController],
-    providers: [UsersService, UserRepository],
+    providers: [UsersService, UserRepository, AuthService, JwtService],
 })
 export class AppModule {
 }

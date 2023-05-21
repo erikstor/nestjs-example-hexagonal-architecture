@@ -1,43 +1,31 @@
 // Tests that the findUserByEmail method returns a User object.
 import {UsersService} from "../../src/users/app/users.service";
-import {User} from "../../src/users/domain/entities/users.entity";
 import {NotFoundException} from "@nestjs/common";
 import {UserRepository} from "../../src/users/infra/repositories/user.repository";
+import {UsuariosEntity} from "../../src/users/domain/entities";
 
 it("Test para retornar una instancia de usuario", async () => {
     const userRepositoryMock = {
-        findUserByEmail: jest.fn().mockResolvedValue(new User({
-            fullName: "",
-            isActive: false,
-            password: "",
-            roles: ['user'],
-            email: "test@test.com"
-        }))
+        findUserByEmail: jest.fn().mockResolvedValue(new UsuariosEntity())
     }
     const usersService = new UsersService(userRepositoryMock as any)
 
     const email = "test@test.com"
     const result = await usersService.findUserByEmail(email)
 
-    expect(result).toBeInstanceOf(User)
+    expect(result).toBeInstanceOf(UsuariosEntity)
 })
 
 // Tests that the findUserByEmail method returns the correct User object based on the email parameter.
 it("test_find_user_by_email_returns_correct_user_object", async () => {
     const userRepositoryMock = {
-        findUserByEmail: jest.fn().mockResolvedValue(new User({
-            fullName: "",
-            isActive: false,
-            password: "",
-            roles: ['user'],
-            email: "test@test.com"
-        }))
+        findUserByEmail: jest.fn().mockResolvedValue(new UsuariosEntity())
     }
     const usersService = new UsersService(userRepositoryMock as any)
 
     const result = await usersService.findUserByEmail("test@test.com")
 
-    expect(result.email).toBe("test@test.com")
+    expect(result.correo).toBe("test@test.com")
 })
 
 // Tests that the findUserByEmail method throws an error when the email parameter is null.

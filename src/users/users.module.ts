@@ -1,20 +1,26 @@
 import {Module} from '@nestjs/common';
-import {UsersController} from "./infra/controller/users.controller";
+import {UsersController} from "./infra/controllers/users.controller";
 import {UsersService} from "./app/users.service";
 import {UserRepository} from "./infra/repositories/user.repository";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {User} from "./domain/entities/users.entity";
+import {RolesEntity, UsuariosEntity} from "./domain/entities";
+import {AuthService} from './app/auth.service';
+import {JwtModule, JwtService} from "@nestjs/jwt";
 
 @Module({
     controllers: [UsersController],
     providers: [
         UsersService,
-        UserRepository
+        UserRepository,
+        AuthService,
+        JwtService
     ],
     imports: [
         TypeOrmModule.forFeature([
-            User
-        ])
+            UsuariosEntity,
+            RolesEntity
+        ]),
+        JwtModule.register({ secret: 'hard!to-guess_secret' })
     ]
 })
 export class UsersModule {

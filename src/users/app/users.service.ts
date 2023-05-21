@@ -1,6 +1,6 @@
 import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {UserRepository} from "../infra/repositories/user.repository";
-import {User} from "../domain/entities/users.entity";
+import {UsuariosEntity} from "../domain/entities";
 
 @Injectable()
 export class UsersService {
@@ -8,7 +8,7 @@ export class UsersService {
     constructor(private readonly userRepository: UserRepository) {
     }
 
-    async findUserByEmail(email: string): Promise<User> {
+    async findUserByEmail(email: string): Promise<UsuariosEntity> {
 
         if (!email) throw new BadRequestException('El parametro email es requierido')
 
@@ -18,6 +18,16 @@ export class UsersService {
 
         return user
 
+    }
+
+    async findOneById(id: number): Promise<UsuariosEntity> {
+        if (!id) throw new BadRequestException('El parametro id es requierido')
+
+        const user = await this.userRepository.findById(id)
+
+        if (!user) throw new NotFoundException('No se encontro el usuario')
+
+        return user
     }
 
 }
