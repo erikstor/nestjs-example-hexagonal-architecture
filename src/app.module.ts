@@ -19,7 +19,7 @@ import {JwtService} from "@nestjs/jwt";
             port: 5432,
             database: 'hexagonal',
             username: 'postgres',
-            password: '12345',
+            password: '1234',
             autoLoadEntities: true,
             synchronize: true
         }),
