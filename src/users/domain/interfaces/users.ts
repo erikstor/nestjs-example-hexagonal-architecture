@@ -1,6 +1,6 @@
 export const SignUpUsersTypes = {
     'prop': 'Propietario',
-    'admin': 'Administrador',
+    //'admin': 'Administrador',
     'client': 'Cliente',
     'employee': 'Empleado'
 }
