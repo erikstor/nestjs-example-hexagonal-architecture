@@ -10,9 +10,9 @@ export class SignInDto {
         required: true
     })
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({message: 'El campo email es requerido'})
     @MinLength(1)
-    @IsEmail()
+    @IsEmail({}, {message: 'El campo email debe ser un correo valido'})
     email: string
 
     @ApiProperty({
@@ -20,9 +20,8 @@ export class SignInDto {
         description: 'Debe ser una cadena de texto',
         required: true
     })
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(1)
+    @IsString({message: 'La clave es obligatoria'})
+    @IsNotEmpty({message: 'La clave es obligatoria'})
     password: string
 
 }

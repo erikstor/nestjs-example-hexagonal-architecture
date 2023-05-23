@@ -6,12 +6,14 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {RolesEntity, UsuariosEntity} from "./domain/entities";
 import {AuthService} from './app/auth.service';
 import {JwtModule, JwtService} from "@nestjs/jwt";
+import {RoleRepository} from "./infra/repositories/role.repository";
 
 @Module({
     controllers: [UsersController],
     providers: [
         UsersService,
         UserRepository,
+        RoleRepository,
         AuthService,
         JwtService
     ],
@@ -20,7 +22,7 @@ import {JwtModule, JwtService} from "@nestjs/jwt";
             UsuariosEntity,
             RolesEntity
         ]),
-        JwtModule.register({ secret: 'hard!to-guess_secret' })
+        JwtModule.register({secret: 'hard!to-guess_secret'})
     ]
 })
 export class UsersModule {

@@ -37,6 +37,6 @@ export class UsuariosEntity {
         {
             eager: true,
             persistence: true,
-    })
+        })
     role!: RolesEntity | number
 }
