@@ -1,7 +1,6 @@
 import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {UserRepository} from "../infra/repositories/user.repository";
 import {UsuariosEntity} from "../domain/entities";
-import {SignUpDto} from "./dto/signUp.dto";
 import {RoleRepository} from "../infra/repositories/role.repository";
 import {SignUpUsersTypes} from "../domain/interfaces/users";
 
