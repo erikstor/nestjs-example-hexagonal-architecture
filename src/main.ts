@@ -13,10 +13,11 @@ async function bootstrap() {
         .setDescription('Api que expone las funcionalidades correspondientes al microservicio de usuarios')
         .setVersion('1.0')
         .addTag('Usuarios')
+        .addServer('api')
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('docs', app, document);
 
     app.setGlobalPrefix('api')
     app.useGlobalPipes(

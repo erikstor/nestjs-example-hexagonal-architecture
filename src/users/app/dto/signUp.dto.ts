@@ -1,6 +1,6 @@
 import {IsEmail, IsNotEmpty, IsNumber, IsString, Min, MinLength, Validate} from "class-validator";
 import {ApiProperty} from "@nestjs/swagger";
-import {SignUpPhoneFieldValidator, SignUpTypeFieldValidator} from "../../infra/validators/users";
+import {SignUpPhoneFieldValidator, SignUpTypeFieldValidator} from "../../infra/validators/users.validator";
 
 
 export class SignUpDto {

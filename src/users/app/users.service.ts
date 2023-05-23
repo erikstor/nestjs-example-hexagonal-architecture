@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
+import {BadRequestException, Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
 import {UserRepository} from "../infra/repositories/user.repository";
 import {UsuariosEntity} from "../domain/entities";
 import {RoleRepository} from "../infra/repositories/role.repository";
@@ -53,7 +53,11 @@ export class UsersService {
         toSave.clave = user.clave
         toSave.role = role.id
 
-        return this.userRepository.save(toSave)
+        try {
+            return this.userRepository.save(toSave)
+        } catch (e) {
+            throw new InternalServerErrorException('Ocurrio un fallo en el guardado del restaurante')
+        }
 
     }
 

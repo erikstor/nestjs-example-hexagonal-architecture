@@ -23,6 +23,9 @@ import {RoleRepository} from "./infra/repositories/role.repository";
             RolesEntity
         ]),
         JwtModule.register({secret: 'hard!to-guess_secret'})
+    ],
+    exports: [
+        UsersService, UserRepository, AuthService, JwtService, RoleRepository
     ]
 })
 export class UsersModule {
