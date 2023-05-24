@@ -13,6 +13,7 @@ async function bootstrap() {
         .setDescription('Api que expone las funcionalidades correspondientes al microservicio de usuarios')
         .setVersion('1.0')
         .addTag('Usuarios')
+        .addBearerAuth()
         .addServer('api')
         .build();
 
@@ -20,7 +21,7 @@ async function bootstrap() {
     SwaggerModule.setup('docs', app, document);
 
     app.enableCors({
-        allowedHeaders: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
+        allowedHeaders: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
         origin: [
             'http://localhost:4000/'
         ]
