@@ -1,59 +1,171 @@
-// Tests that the findUserByEmail method returns a User object.
-import {UsersService} from "../../src/users/app/users.service";
-import {NotFoundException} from "@nestjs/common";
-import {UserRepository} from "../../src/users/infra/repositories/user.repository";
-import {UsuariosEntity} from "../../src/users/domain/entities";
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { UsersService } from '../../src/users/app/users.service';
+import { UserRepository } from '../../src/users/infra/repositories/user.repository';
+import { RoleRepository } from '../../src/users/infra/repositories/role.repository';
+import { RolesEntity, UsuariosEntity } from '../../src/users/domain/entities';
 
-it("Test para retornar una instancia de usuario", async () => {
-    const userRepositoryMock = {
-        findUserByEmail: jest.fn().mockResolvedValue(new UsuariosEntity())
-    }
-    const usersService = new UsersService(userRepositoryMock as any)
+import { AppModule } from '../../src/app.module';
 
-    const email = "test@test.com"
-    const result = await usersService.findUserByEmail(email)
+describe('UsersService', () => {
+  let usersService: UsersService;
+  let userRepository: UserRepository;
+  let roleRepository: RoleRepository;
 
-    expect(result).toBeInstanceOf(UsuariosEntity)
-})
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+      providers: [UsersService, UserRepository, RoleRepository],
+    }).compile();
 
-// Tests that the findUserByEmail method returns the correct User object based on the email parameter.
-it("test_find_user_by_email_returns_correct_user_object", async () => {
-    const userRepositoryMock = {
-        findUserByEmail: jest.fn().mockResolvedValue(new UsuariosEntity())
-    }
-    const usersService = new UsersService(userRepositoryMock as any)
+    usersService = moduleRef.get<UsersService>(UsersService);
+    userRepository = moduleRef.get<UserRepository>(UserRepository);
+    roleRepository = moduleRef.get<RoleRepository>(RoleRepository);
+  });
 
-    const result = await usersService.findUserByEmail("test@test.com")
+  describe('findUserByEmail', () => {
+    it('should throw BadRequestException if email parameter is missing', async () => {
+      await expect(usersService.findUserByEmail(undefined)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
 
-    expect(result.correo).toBe("test@test.com")
-})
+    it('should call userRepository.findUserByEmail with the provided email', async () => {
+      const email = 'test@example.com';
+      const findUserByEmailSpy = jest.spyOn(userRepository, 'findUserByEmail');
+      await usersService.findUserByEmail(email);
+      expect(findUserByEmailSpy).toHaveBeenCalledWith(email);
+    });
+  });
 
-// Tests that the findUserByEmail method throws an error when the email parameter is null.
-it("test_find_user_with_null_email_throws_error", async () => {
-    const userRepositoryMock = {
-        findUserByEmail: jest.fn().mockResolvedValue(null)
-    }
-    const usersService = new UsersService(userRepositoryMock as any)
+  describe('findOneById', () => {
+    it('should throw BadRequestException if id parameter is missing', async () => {
+      await expect(usersService.findOneById(undefined)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
 
-    await expect(usersService.findUserByEmail(null)).rejects.toThrow()
-})
+    it('should throw NotFoundException if user is not found', async () => {
+      const id = 1;
+      jest.spyOn(userRepository, 'findById').mockResolvedValueOnce(undefined);
+      await expect(usersService.findOneById(id)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
 
-// Tests that the findUserByEmail method throws a NotFoundException if the user is not found.
-it("test_find_user_throws_not_found_exception_if_user_not_found", async () => {
-    const userRepositoryMock = {
-        findUserByEmail: jest.fn().mockResolvedValue(null)
-    }
-    const usersService = new UsersService(userRepositoryMock as any)
+    it('should return the found user', async () => {
+      const id = 1;
+      const expectedUser: UsuariosEntity = {
+        id: 1,
+        nombre: 'John',
+        apellido: 'Doe',
+        celular: '1234567890',
+        dni: 123456789,
+        correo: 'test@example.com',
+        clave: 'password',
+        role: {
+          id: 1,
+          nombre: 'Administrador',
+          descripcion: 'Administrador',
+          user: undefined,
+        },
+      };
+      jest
+        .spyOn(userRepository, 'findById')
+        .mockResolvedValueOnce(expectedUser);
+      const user = await usersService.findOneById(id);
+      expect(user).toBe(expectedUser);
+    });
+  });
 
-    await expect(usersService.findUserByEmail("nonexistent@test.com")).rejects.toThrow(NotFoundException)
-})
+  describe('create', () => {
+    const user = {
+      nombre: 'John',
+      apellido: 'Doe',
+      celular: '1234567890',
+      dni: '123456789',
+      correo: 'test@example.com',
+      clave: 'password',
+      tipo: 'ADMIN',
+    };
 
-// Tests that the UserRepository class uses test doubles for its DataSource dependency.
-it("test_user_repository_dependency_uses_test_doubles", async () => {
-    const dataSourceMock = {
-        createEntityManager: jest.fn()
-    }
-    const userRepository = new UserRepository(dataSourceMock as any)
+    const roleMock: RolesEntity = {
+      id: 1,
+      nombre: 'Administrador',
+      descripcion: 'Administrador',
+      user: undefined,
+    };
 
-    expect(userRepository.dataSource).toBe(dataSourceMock)
-})
+    it('should throw BadRequestException if the email is already taken', async () => {
+      jest.spyOn(usersService, 'findUserByEmail').mockResolvedValueOnce({
+        id: 1,
+        nombre: 'John',
+        apellido: 'Doe',
+        celular: '1234567890',
+        dni: 123456789,
+        correo: 'test@example.com',
+        clave: 'password',
+        role: 1,
+      });
+      await expect(usersService.create(user)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should throw BadRequestException if the role is not found', async () => {
+      jest
+        .spyOn(usersService, 'findUserByEmail')
+        .mockResolvedValueOnce(undefined);
+      jest
+        .spyOn(usersService, 'findRoleByName')
+        .mockResolvedValueOnce(undefined);
+      await expect(usersService.create(user)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should create and save a new user', async () => {
+      const role = roleMock;
+      jest
+        .spyOn(usersService, 'findUserByEmail')
+        .mockResolvedValueOnce(undefined);
+      jest.spyOn(usersService, 'findRoleByName').mockResolvedValueOnce(role);
+      const saveSpy = jest.spyOn(userRepository, 'save').mockResolvedValueOnce({
+        id: 1,
+        nombre: 'John',
+        apellido: 'Doe',
+        celular: '1234567890',
+        dni: 123456789,
+        correo: 'test@example.com',
+        clave: 'password',
+        role: 1,
+      });
+      const createdUser = await usersService.create(user);
+      expect(createdUser).toBeDefined();
+      expect(saveSpy).toHaveBeenCalledWith(expect.any(UsuariosEntity));
+    });
+
+    it('should throw InternalServerErrorException if there is an error during user saving', async () => {
+      jest
+        .spyOn(usersService, 'findUserByEmail')
+        .mockResolvedValueOnce(undefined);
+      jest.spyOn(usersService, 'findRoleByName').mockResolvedValueOnce({
+        id: 1,
+        nombre: 'Administrador',
+        descripcion: 'Administrador',
+        user: undefined,
+      });
+      jest
+        .spyOn(userRepository, 'save')
+        .mockRejectedValueOnce(new Error('Failed to save user'));
+      await expect(usersService.create(user)).rejects.toThrow(
+        InternalServerErrorException,
+      );
+    });
+  });
+
+});
