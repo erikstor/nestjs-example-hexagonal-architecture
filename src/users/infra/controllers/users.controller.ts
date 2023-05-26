@@ -52,6 +52,7 @@ export class UsersController {
     @ApiOperation({summary: 'Busca un usuario por su id unico'})
     @ApiResponse({status: 200, description: 'Entrega el usuario encontrado'})
     @ApiResponse({status: 400, description: 'Alguno de los parametros enviados en el body son incorrectos'})
+    @ApiResponse({status: 401, description: 'Debe estar loggeado como administrador'})
     @ApiResponse({status: 500, description: 'Error en el servidor'})
     @UseGuards(AdminGuard)
     findOneById(@Query('id', ParseIntPipe) id: number) {
