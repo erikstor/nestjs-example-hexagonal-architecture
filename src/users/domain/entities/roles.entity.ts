@@ -1,26 +1,27 @@
-import {Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm"
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-import {UsuariosEntity} from "./usuarios.entity";
+import { UsuariosEntity } from './usuarios.entity';
 
 @Entity({
-    name: 'roles'
+  name: 'roles',
 })
 export class RolesEntity {
+  @PrimaryGeneratedColumn('increment')
+  @PrimaryColumn('bigint')
+  id!: number;
 
-    @PrimaryGeneratedColumn('increment')
-    @PrimaryColumn('bigint')
-    id!: number
+  @Column('varchar')
+  nombre!: string;
 
-    @Column('varchar')
-    nombre!: string
+  @Column('varchar')
+  descripcion!: string;
 
-    @Column('varchar')
-    descripcion!: string
-
-    @OneToMany(
-        () => UsuariosEntity,
-        (user) => user.id,
-    )
-    user: UsuariosEntity | undefined
-
+  @OneToMany(() => UsuariosEntity, (user) => user.id)
+  user: UsuariosEntity | undefined;
 }

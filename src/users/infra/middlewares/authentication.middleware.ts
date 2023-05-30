@@ -1,5 +1,10 @@
-import { HttpException, HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
-import {UsersService} from "../../app/users.service";
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NestMiddleware,
+} from '@nestjs/common';
+import { UsersService } from '../../app/users.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

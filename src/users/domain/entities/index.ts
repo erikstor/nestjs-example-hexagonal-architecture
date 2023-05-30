@@ -1,3 +1,2 @@
-export {RolesEntity} from "./roles.entity";
-export {UsuariosEntity} from "./usuarios.entity";
-
+export { RolesEntity } from './roles.entity';
+export { UsuariosEntity } from './usuarios.entity';

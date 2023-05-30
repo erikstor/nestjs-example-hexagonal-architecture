@@ -115,6 +115,4 @@ describe('AuthService', () => {
       expect(result.access_token).toBe(accessToken);
     });
   });
-
-
 });
