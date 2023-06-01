@@ -18,7 +18,7 @@ export class AuthService {
     const compare = await bcrypt.compare(pass, user.clave!);
 
     if (!compare) {
-      throw new BadRequestException();
+      throw new BadRequestException('Las credenciales no son validas');
     }
 
     return this.genareToken({ ...user });
