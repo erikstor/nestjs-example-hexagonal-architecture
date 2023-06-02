@@ -1,15 +1,32 @@
+# version: '3'
+
+# services:
+#   db:
+#     image: 'postgres:14.3'
+#     restart: 'always'
+#     ports:
+#       - '5432:5432'
+#     environment:
+#       POSTGRES_PASSWORD: ${DB_PASSWORD}
+#       POSTGRES_DB: ${DB_NAME}
+#     container_name: 'hexagonal-db'
+#     volumes:
+#       - ./postgres:/var/lib/postgresql/data
+
 version: '3'
-
-
 services:
-  db:
-    image: 'postgres:14.3'
-    restart: 'always'
-    ports:
-      - '5432:5432'
+  backend:
+    build: ./
+    container_name: nestjs_api
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    container_name: 'hexagonal-db'
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - PORT=3000
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+    image: node:nestjs_api
+    networks:
+      - nestjs_network
+
+networks:
+  nestjs_network:
+    driver: bridge

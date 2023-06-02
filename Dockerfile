@@ -1,6 +1,6 @@
 #build stage
 FROM node:alpine AS build
-WORKDIR /home/ubuntu/projects/microservice-usuarios
+WORKDIR .
 COPY package*.json ./
 RUN npm install
 COPY . .
@@ -8,12 +8,12 @@ RUN npm run build
 
 #prod stage
 FROM node:alpine
-WORKDIR /home/ubuntu/projects/microservice-usuarios
+WORKDIR .
 ENV ENVIRONMENT=production
-COPY --from=build /home/ubuntu/projects/microservice-usuarios/dist/ ./dist
+COPY --from=build ./dist/ ./dist
 COPY package*.json ./
 RUN npm install --only=production
 RUN rm package*.json
 EXPOSE 5000
 
-CMD ["node", "dist/src/main.js"]
+CMD ["node", "dist/main.js"]
