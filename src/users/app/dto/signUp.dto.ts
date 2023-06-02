@@ -103,7 +103,7 @@ export class SignUpDto {
   celular: string;
 
   @ApiProperty({
-    example: 'password',
+    example: 'prop',
     description: 'Debe ser una cadena de texto',
     required: true,
   })
