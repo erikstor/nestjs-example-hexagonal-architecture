@@ -1,0 +1,12 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+        "Name": "public.ecr.aws/m2q9v7q3/micro-usuarios"
+    },
+    "Ports": [
+        {
+            "ContainerPort": 5000,
+            "HostPort": 5000
+        }
+    ]
+}
