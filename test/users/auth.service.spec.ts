@@ -35,6 +35,8 @@ describe('AuthService', () => {
     jwtService = moduleRef.get<JwtService>(JwtService);
     userRepository = moduleRef.get<UserRepository>(UserRepository);
     roleRepository = moduleRef.get<RoleRepository>(RoleRepository);
+
+    await moduleRef.close()
   });
 
   describe('signIn', () => {

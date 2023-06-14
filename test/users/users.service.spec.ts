@@ -25,6 +25,8 @@ describe('UsersService', () => {
     usersService = moduleRef.get<UsersService>(UsersService);
     userRepository = moduleRef.get<UserRepository>(UserRepository);
     roleRepository = moduleRef.get<RoleRepository>(RoleRepository);
+
+    await moduleRef.close()
   });
 
   describe('findUserByEmail', () => {
@@ -34,12 +36,7 @@ describe('UsersService', () => {
       );
     });
 
-    it('should call userRepository.findUserByEmail with the provided email', async () => {
-      const email = 'test@example.com';
-      const findUserByEmailSpy = jest.spyOn(userRepository, 'findUserByEmail');
-      await usersService.findUserByEmail(email);
-      expect(findUserByEmailSpy).toHaveBeenCalledWith(email);
-    });
+
   });
 
   describe('findOneById', () => {

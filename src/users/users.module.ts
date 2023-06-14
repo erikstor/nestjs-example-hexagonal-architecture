@@ -7,19 +7,22 @@ import { RolesEntity, UsuariosEntity } from './domain/entities';
 import { AuthService } from './app/auth.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { RoleRepository } from './infra/repositories/role.repository';
+import { HealthCheckController } from './infra/controllers/health.controller';
+import { TerminusModule } from '@nestjs/terminus';
 
 @Module({
-  controllers: [UsersController],
+  controllers: [UsersController, HealthCheckController],
   providers: [
     UsersService,
     UserRepository,
     RoleRepository,
     AuthService,
-    JwtService,
+    JwtService,    
   ],
   imports: [
     TypeOrmModule.forFeature([UsuariosEntity, RolesEntity]),
     JwtModule.register({ secret: 'hard!to-guess_secret' }),
+    TerminusModule
   ],
   exports: [
     UsersService,

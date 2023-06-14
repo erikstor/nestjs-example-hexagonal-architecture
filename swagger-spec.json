@@ -1,0 +1,362 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/users/sign-up": {
+            "post": {
+                "operationId": "UsersController_signUp",
+                "summary": "Inicia la sesion de un usuario",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SignUpDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Entrega un token para acceder a los servicios que su rol le permita"
+                    },
+                    "400": {
+                        "description": "Alguno de los parametros enviados en el body son incorrectos"
+                    },
+                    "500": {
+                        "description": "Error en el servidor"
+                    }
+                },
+                "tags": [
+                    "Usuarios"
+                ]
+            }
+        },
+        "/users/sign-in": {
+            "post": {
+                "operationId": "UsersController_signIn",
+                "summary": "Registra un usuario",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SignInDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Entrega un token para acceder a los servicios que su rol le permita"
+                    },
+                    "400": {
+                        "description": "Alguno de los parametros enviados en el body son incorrectos"
+                    },
+                    "500": {
+                        "description": "Error en el servidor"
+                    }
+                },
+                "tags": [
+                    "Usuarios"
+                ]
+            }
+        },
+        "/users": {
+            "get": {
+                "operationId": "UsersController_findOneById",
+                "summary": "Busca un usuario por su id unico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "query",
+                        "description": "Identificador unico del usuario",
+                        "example": 1,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entrega el usuario encontrado"
+                    },
+                    "400": {
+                        "description": "Alguno de los parametros enviados en el body son incorrectos"
+                    },
+                    "401": {
+                        "description": "Debe estar loggeado como administrador"
+                    },
+                    "500": {
+                        "description": "Error en el servidor"
+                    }
+                },
+                "tags": [
+                    "Usuarios"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/health": {
+            "get": {
+                "operationId": "HealthCheckController_checkHealth",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "The Health Check is successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "info": {
+                                            "type": "object",
+                                            "example": {
+                                                "database": {
+                                                    "status": "up"
+                                                }
+                                            },
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "status": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "nullable": true
+                                        },
+                                        "error": {
+                                            "type": "object",
+                                            "example": {},
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "status": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "nullable": true
+                                        },
+                                        "details": {
+                                            "type": "object",
+                                            "example": {
+                                                "database": {
+                                                    "status": "up"
+                                                }
+                                            },
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "status": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "The Health Check is not successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "info": {
+                                            "type": "object",
+                                            "example": {
+                                                "database": {
+                                                    "status": "up"
+                                                }
+                                            },
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "status": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "nullable": true
+                                        },
+                                        "error": {
+                                            "type": "object",
+                                            "example": {
+                                                "redis": {
+                                                    "status": "down",
+                                                    "message": "Could not connect"
+                                                }
+                                            },
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "status": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "nullable": true
+                                        },
+                                        "details": {
+                                            "type": "object",
+                                            "example": {
+                                                "database": {
+                                                    "status": "up"
+                                                },
+                                                "redis": {
+                                                    "status": "down",
+                                                    "message": "Could not connect"
+                                                }
+                                            },
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "status": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "info": {
+        "title": "Microservicio de usuarios",
+        "description": "Api que expone las funcionalidades correspondientes al microservicio de usuarios",
+        "version": "1.0",
+        "contact": {}
+    },
+    "tags": [
+        {
+            "name": "Usuarios",
+            "description": ""
+        }
+    ],
+    "servers": [
+        {
+            "url": "api"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearer": {
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "type": "http"
+            }
+        },
+        "schemas": {
+            "SignUpDto": {
+                "type": "object",
+                "properties": {
+                    "correo": {
+                        "type": "string",
+                        "example": "example@example.com",
+                        "description": "Debe ser una cadena de texto con formato email valido"
+                    },
+                    "clave": {
+                        "type": "string",
+                        "example": "password",
+                        "description": "Debe ser una cadena de texto"
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "example": "Pepito",
+                        "description": "El nombre es obligatorio, debe contener minimo tres letras"
+                    },
+                    "apellido": {
+                        "type": "string",
+                        "example": "Perez",
+                        "description": "El apellido es obligatorio, debe contener minimo tres letras"
+                    },
+                    "dni": {
+                        "type": "number",
+                        "example": 123456789,
+                        "description": "La identificacion es obligatoria, debe ser numerica"
+                    },
+                    "celular": {
+                        "type": "string",
+                        "example": "+573153226431",
+                        "description": "El celular es obligatorio, debe contener maximo 13 caracteres, si es un celular debe agregar el \"+\""
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "example": "prop",
+                        "description": "Debe ser una cadena de texto"
+                    }
+                },
+                "required": [
+                    "correo",
+                    "clave",
+                    "nombre",
+                    "apellido",
+                    "dni",
+                    "celular",
+                    "tipo"
+                ]
+            },
+            "SignInDto": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "example@example.com",
+                        "description": "Debe ser una cadena de texto con formato email valido"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password",
+                        "description": "Debe ser una cadena de texto"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
+            }
+        }
+    }
+}
