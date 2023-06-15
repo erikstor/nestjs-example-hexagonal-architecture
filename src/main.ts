@@ -10,7 +10,7 @@ async function bootstrap() {
   const logger = new Logger();
 
   const config = new DocumentBuilder()
-    .setTitle('Microservicio de usuarios')
+    .setTitle('Microservicio de usuarios con CI/CD')
     .setDescription(
       'Api que expone las funcionalidades correspondientes al microservicio de usuarios',
     )
