@@ -12,7 +12,7 @@ WORKDIR .
 ENV ENVIRONMENT=production
 COPY --from=build ./dist/ ./dist
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install --only=production --omit=dev
 RUN rm package*.json
 EXPOSE 5000
 
