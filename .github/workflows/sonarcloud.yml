@@ -72,13 +72,31 @@ jobs:
 
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Deploy to Elastic Beanstalk
-        run: |
-          eb init ${{ env.AWS_EB_APPLICATION }} --region ${{ env.AWS_REGION }}
-          eb deploy ${{ env.AWS_EB_ENVIRONMENT }}
+      - name: Create ZIP deployment package
+        run: zip -r deploy_package.zip ./Dockerrun.aws.json
+
+      # - name: Upload package to S3 bucket
+      #   run: aws s3 cp s3://elasticbeanstalk-us-east-2-038356868327
+
+      # - name: Deploy to Elastic Beanstalk
+          
+      #   run: |
+      #     eb init ${{ env.AWS_EB_APPLICATION }} --region ${{ env.AWS_REGION }}
+      #     eb deploy ${{ env.AWS_EB_ENVIRONMENT }}
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ${{ env.AWS_EB_APPLICATION }}
+          environment_name: ${{ env.AWS_EB_ENVIRONMENT }}
+          version_label: 'latest'
+          region: ${{ env.AWS_REGION }}
+          deployment_package: deploy_package.zip
