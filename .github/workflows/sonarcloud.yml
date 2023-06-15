@@ -37,7 +37,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
       - name: Build
         run: npm run build
   deploy-ecr:
@@ -79,7 +79,10 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Create ZIP deployment package
-        run: zip -r deploy_package.zip .
+        run: pwd
+
+      - name: Create ZIP deployment package
+        run: zip -r deploy_package.zip ../../Dockerrun.aws.json
 
       # - name: Upload package to S3 bucket
       #   run: aws s3 cp s3://elasticbeanstalk-us-east-2-038356868327
