@@ -79,7 +79,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Create ZIP deployment package
-        run: zip -r deploy_package.zip ../../Dockerrun.aws.json
+        run: zip -r deploy_package.zip .
 
       # - name: Upload package to S3 bucket
       #   run: aws s3 cp s3://elasticbeanstalk-us-east-2-038356868327
