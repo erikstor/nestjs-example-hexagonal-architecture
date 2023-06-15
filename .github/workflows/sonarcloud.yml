@@ -123,5 +123,5 @@ jobs:
       # Deploy to EB
       - name: Deploy to Elastic Beanstalk
         run: |
-          eb init ${{ env.AWS_EB_APPLICATION }} --region ${{ env.AWS_REGION }}
+          eb init -n ${{ env.AWS_EB_APPLICATION }} --region ${{ env.AWS_REGION }}
           eb deploy ${{ env.AWS_EB_ENVIRONMENT }}
