@@ -86,4 +86,5 @@ jobs:
           environment_name: ${{ env.AWS_EB_ENVIRONMENT }}
           version_label: 'latest'
           region: ${{ env.AWS_REGION }}
-          deployment_package: deploy.zip
+          # deployment_package: deploy.zip
+          use_existing_version_if_available: true
