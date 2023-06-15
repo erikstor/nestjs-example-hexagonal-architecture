@@ -15,7 +15,7 @@ export class AuthService {
   async signIn(email: string, pass: string): Promise<{ access_token: string }> {
     const user = await this.usersService.findUserByEmail(email);
 
-    const compare = await bcrypt.compare(pass, user.clave!);
+    const compare = await bcrypt.compare(pass, user.clave);
 
     if (!compare) {
       throw new BadRequestException('Las credenciales no son validas');

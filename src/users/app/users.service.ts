@@ -55,7 +55,7 @@ export class UsersService {
     toSave.role = role.id;
 
     try {
-      return this.userRepository.save(toSave).catch((e) => {
+      return await this.userRepository.save(toSave).catch((e) => {
         throw new InternalServerErrorException({
           message: 'Ocurrio un fallo en el guardado del usuario',
           detail: e,

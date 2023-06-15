@@ -49,7 +49,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
@@ -74,9 +74,6 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Generate deployment package
-        run: zip -r deploy.zip ./Dockerrun.aws.json
-
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
         with:
@@ -85,6 +82,5 @@ jobs:
           application_name: ${{ env.AWS_EB_APPLICATION }}
           environment_name: ${{ env.AWS_EB_ENVIRONMENT }}
           version_label: 'latest'
-          region: ${{ env.AWS_REGION }}
-          # deployment_package: deploy.zip
+          region: ${{ env.AWS_REGION }}          
           use_existing_version_if_available: true

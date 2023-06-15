@@ -43,4 +43,4 @@ async function bootstrap() {
   logger.log(`App running on port ${process.env.PORT}`);
 }
 
-bootstrap();
+bootstrap().then().catch(reason => console.log(reason));
